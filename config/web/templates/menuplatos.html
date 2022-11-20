@@ -51,9 +51,19 @@
 
     <section>
         <div class="container">
-            <div class="row row-cols-1 row-cols-md-4">
+            <div class="row row-cols-1 row-cols-md-4 pt-5">
                 {% for plato in platos %}
-                <h1>{{plato.nombre}}</h1>
+                <div class="card pt-3 m-2" style="width: 18rem;">
+                    <img src="{{plato.fotografia}}" class="card-img-top " alt="...">
+                    <div class="card-body">
+                        <h5>{{plato.nombre}}</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Precio: </strong>{{plato.precio}}</li>
+                            <li class="list-group-item"><strong>tipo: </strong>{{plato.tipo}} </li>
+                            <li class="list-group-item"><strong>descripcion: </strong>{{plato.descripcion}}</li>
+                        </ul>
+                    </div>
+                  </div>
                 {% endfor %}
             </div>
         </div>

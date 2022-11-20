@@ -122,12 +122,25 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
+class Empleados(models.Model):
+    nombre = models.CharField(max_length=50)
+    salario = models.IntegerField()
+    direccion = models.CharField(max_length=40)
+    telefono = models.IntegerField()
+    tipoempleado = models.CharField(db_column='tipoEmpleado', max_length=13)  # Field name made lowercase.
+    fotografia = models.CharField(max_length=200)
+
+    class Meta:
+        managed = False
+        db_table = 'empleados'
+
+
 class Platos(models.Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=100)
-    imagen = models.CharField(max_length=200)
+    fotografia = models.CharField(max_length=200)
     precio = models.IntegerField()
-    tipo = models.CharField(max_length=50)
+    tipo = models.CharField(max_length=11)
 
     class Meta:
         managed = False

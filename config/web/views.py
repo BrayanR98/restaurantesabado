@@ -1,8 +1,9 @@
 from django.shortcuts import render
 
 from web.formularios.formularioPlatos import FormularioPlatos
+from web.formularios.formularioEmpleados import FormularioEmpleados
 
-from web.models import Platos
+from web.models import Platos,Empleados
 
 # Create your views here.
 
@@ -38,12 +39,19 @@ def PlatosVista(request):
             #capturamos la data
             datosPlato=datosDelFormulario.cleaned_data
             #creamos un objeto del tipo MODELO PLATO
+            if datosPlato["tipo"] == '1' :
+                t='Entrada'
+            elif datosPlato["tipo"] == '2':
+                t='Plato Fuerte'
+            elif datosPlato["tipo"] == '3':
+                t='Postre'
+            
             platoNuevo=Platos(
                 nombre=datosPlato["nombre"],
                 descripcion=datosPlato["descripcion"],
-                imagen=datosPlato["fotografia"],
+                fotografia=datosPlato["fotografia"],
                 precio=datosPlato["precio"],
-                tipo=datosPlato["tipo"]
+                tipo=t
             )
             #Intentamos llevar el objeto platoNuevo a LA BD
             try:
@@ -56,3 +64,47 @@ def PlatosVista(request):
                 data["bandera"]=False
 
     return render(request,'menuplatos.html',data)
+
+def EmpleadosVista(request):
+
+    empleadosConsultados = Empleados.objects.all()
+    print(empleadosConsultados)
+
+    formulario=FormularioEmpleados()
+
+    data={
+        'formulario':formulario,
+        'bandera':False,
+        'empleados':empleadosConsultados
+    }
+
+    if request.method == 'POST':
+
+        datosDelFormulario = FormularioEmpleados(request.POST)
+        if datosDelFormulario.is_valid():
+            datosEmpleado = datosDelFormulario.cleaned_data
+            if datosEmpleado["tipoempleado"] == '1' :
+                t='cheff'
+            elif datosEmpleado["tipoempleado"] == '2':
+                t='Administrador'
+            elif datosEmpleado["tipoempleado"] == '3':
+                t='Mesero'
+            else:
+                t='Ayudante'
+            empleadoNuevo=Empleados(
+                nombre=datosEmpleado["nombre"],
+                salario=datosEmpleado["salario"],
+                direccion = datosEmpleado["direccion"],
+                telefono = datosEmpleado["telefono"],
+                tipoempleado = t,
+                fotografia = datosEmpleado["fotografia"]
+            )
+
+            try:
+                empleadoNuevo.save()
+                data["bandera"]=True
+                print("EXITO GUARDANDO AL EMPLEADO")
+            except Exception as error:
+                print("error",error)
+                data["bandera"]=False
+    return render(request,'menuempleados.html',data)
